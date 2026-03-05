@@ -443,15 +443,13 @@ def test_verifier_msi2024():
     # Méthodes de Competition redéfinies
     methodes_competition_redefinies = ("simuler", "renvoyer_classement", "renvoyer_resultats_str")
     for methode in methodes_competition_redefinies:
-        assert (
-            callable(getattr(MSI2024, f"{methode}", None)) and
-            getattr(MSI2024, methode) is not getattr(Competition, methode)
+        assert callable(getattr(MSI2024, f"{methode}", None)) and getattr(MSI2024, methode) is not getattr(
+            Competition, methode
         ), f"La classe MSI2024 ne redéfinit pas la méthode publique {methode!r}."
 
     # Méthodes de Tournoi redéfinies
     methodes_tournoi_redefinies = ("renvoyer_classement_str",)
     for methode in methodes_tournoi_redefinies:
-        assert (
-            callable(getattr(MSI2024, f"{methode}", None)) and
-            getattr(MSI2024, methode, False) is not getattr(Tournoi, methode, True)
+        assert callable(getattr(MSI2024, f"{methode}", None)) and getattr(MSI2024, methode, False) is not getattr(
+            Tournoi, methode, True
         ), f"La classe MSI2024 ne redéfinit pas la méthode publique {methode!r}."
