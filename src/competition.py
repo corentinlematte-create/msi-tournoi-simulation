@@ -8,8 +8,8 @@ from .equipe import Equipe
 class Competition(ABC):
     """Classe modélisant une compétition.
 
-    Un tournoi et une phase d'un tournoi étant des compétitions, les caractéristiques et fonctionnalités communes sont
-    regroupées dans cette classe mère.
+    Un tournoi et une phase d'un tournoi étant des compétitions, les caractéristiques et
+    fonctionnalités communes sont regroupées dans cette classe mère.
     """
 
     @property
@@ -43,7 +43,8 @@ class Competition(ABC):
         # Remplacement des têtes de série par les équipes
         chapeaux = self._CHAPEAUX
         self._chapeaux_equipes: dict[str, list[Equipe]] = {
-            chapeau: sorted([self._equipes[seed] for seed in chapeaux[chapeau]]) for chapeau in chapeaux
+            chapeau: sorted([self._equipes[seed] for seed in chapeaux[chapeau]]) for chapeau in
+            chapeaux
         }
 
     @abstractmethod
