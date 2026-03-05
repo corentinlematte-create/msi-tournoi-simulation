@@ -2,5 +2,5 @@
 from .personne import Personne
 
 
-class Coach:
+class Coach(Personne):
     pass
