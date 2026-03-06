@@ -19,7 +19,9 @@ class Phase(ABC, Competition):
         ...
 
     def __init__(self) -> None:
-        self._tableau = copy.deepcopy(self._TABLEAU_VIDE())
+        self._tableau: dict[str, dict[str, dict[str, Match] | Match]] = copy.deepcopy(
+            self._TABLEAU_VIDE()
+            )
 
     @abstractmethod
     def _simuler_tirage(self) -> None:
