@@ -1,5 +1,8 @@
 """Implémentation de la classe MSI2024Bracket."""
 
+import random as rd
+
+from .equipe import Equipe
 from .match import Match
 from .phase import Phase
 
@@ -52,6 +55,185 @@ class MSI2024Bracket(Phase):
             },
         }
         return tableau_vide
+
+    def _simuler_tirage(self) -> None:
+        """Permet de simuler le tirage des Brackets"""
+        # while True:
+        # Boucle de tentative si une équipe est impossible à placer à cause de
+        # la règle des régions
+        # try:
+        ind: list[int] = [rd.randint(0, 1) for _ in range(4)]
+
+        self._tableau["Tour 1"]["Match 1"].ajouter_equipe_1(
+            self._chapeaux_equipes["Chapeau 1"][ind[0]])
+        self._tableau["Tour 1"]["Match 4"].ajouter_equipe_1(
+            self._chapeaux_equipes["Chapeau 1"][abs(ind[0] - 1)])
+        self._tableau["Tour 1"]["Match 2"].ajouter_equipe_1(
+            self._chapeaux_equipes["Chapeau 2"][ind[1]])
+        self._tableau["Tour 1"]["Match 3"].ajouter_equipe_1(
+            self._chapeaux_equipes["Chapeau 2"][abs(ind[1] - 1)])
+
+        if self._chapeaux_equipes["Chapeau 3"][ind[2]].region() in (
+                self._tableau["Tour 1"]["Match 1"].renvoyer_regions_equipes() |
+                self._tableau["Tour 1"]["Match 2"].renvoyer_regions_equipes()):
+            self._tableau["Tour 1"]["Match 3"].ajouter_equipe_2(
+                self._chapeaux_equipes["Chapeau 3"][ind[2]])
+            self._tableau["Tour 1"]["Match 2"].ajouter_equipe_2(
+                self._chapeaux_equipes["Chapeau 3"][abs(ind[2] - 1)])
+        else:
+            self._tableau["Tour 1"]["Match 2"].ajouter_equipe_2(
+                self._chapeaux_equipes["Chapeau 3"][ind[2]])
+            self._tableau["Tour 1"]["Match 3"].ajouter_equipe_2(
+                self._chapeaux_equipes["Chapeau 3"][abs(ind[2] - 1)])
+
+        if self._chapeaux_equipes["Chapeau 4"][ind[3]].region() in (
+                self._tableau["Tour 1"]["Match 1"].renvoyer_regions_equipes() |
+                self._tableau["Tour 1"]["Match 2"].renvoyer_regions_equipes()):
+            self._tableau["Tour 1"]["Match 4"].ajouter_equipe_2(
+                self._chapeaux_equipes["Chapeau 4"][ind[3]])
+            self._tableau["Tour 1"]["Match 1"].ajouter_equipe_2(
+                self._chapeaux_equipes["Chapeau 4"][abs(ind[3] - 1)])
+        else:
+            self._tableau["Tour 1"]["Match 1"].ajouter_equipe_2(
+                self._chapeaux_equipes["Chapeau 4"][ind[3]])
+            self._tableau["Tour 1"]["Match 4"].ajouter_equipe_2(
+                self._chapeaux_equipes["Chapeau 4"][abs(ind[3] - 1)])
+
+    def __simuler_tour_1_matchs_1_a_4(self) -> None:
+        """Permet de simuler les matchs 1 à 4 du tour 1 et prépare les prochains matchs"""
+        self._tableau["Tour 1"]["Match 1"].simuler()
+        self._tableau["Tour 1"]["Match 2"].simuler()
+        self._tableau["Tour 1"]["Match 3"].simuler()
+        self._tableau["Tour 1"]["Match 4"].simuler()
+
+        self._tableau["Tour 2"]["Match 1"].ajouter_equipes(
+            self._tableau["Tour 1"]["Match 1"].renvoyer_equipe_gagnante(),
+            self._tableau["Tour 1"]["Match 2"].renvoyer_equipe_gagnante()
+            )
+        self._tableau["Tour 2"]["Match 2"].ajouter_equipes(
+            self._tableau["Tour 1"]["Match 3"].renvoyer_equipe_gagnante(),
+            self._tableau["Tour 1"]["Match 4"].renvoyer_equipe_gagnante()
+            )
+        self._tableau["Tour 1"]["Match 5"].ajouter_equipes(
+            self._tableau["Tour 1"]["Match 1"].renvoyer_equipe_perdante(),
+            self._tableau["Tour 1"]["Match 2"].renvoyer_equipe_perdante()
+            )
+        self._tableau["Tour 1"]["Match 6"].ajouter_equipes(
+            self._tableau["Tour 1"]["Match 3"].renvoyer_equipe_perdante(),
+            self._tableau["Tour 1"]["Match 4"].renvoyer_equipe_perdante()
+            )
+
+    def __simuler_tour_2_matchs_1_2(self) -> None:
+        """Permet de simuler les matchs 1 et 2 du tour 2 et prépare les prochains matchs"""
+        self._tableau["Tour 2"]["Match 1"].simuler()
+        self._tableau["Tour 2"]["Match 2"].simuler()
+
+        self._tableau["Tour 4"]["Match 1"].ajouter_equipes(
+            self._tableau["Tour 2"]["Match 1"].renvoyer_equipe_gagnante(),
+            self._tableau["Tour 2"]["Match 2"].renvoyer_equipe_gagnante()
+            )
+        self._tableau["Tour 2"]["Match 3"].ajouter_equipe_1(
+            self._tableau["Tour 2"]["Match 1"].renvoyer_equipe_perdante()
+            )
+        self._tableau["Tour 2"]["Match 4"].ajouter_equipe_1(
+            self._tableau["Tour 2"]["Match 2"].renvoyer_equipe_perdante()
+            )
+
+    def __simuler_tour_1_matchs_5_6(self) -> None:
+        """Permet de simuler les matchs 5 et 6 du tour 1 et prépare les prochains matchs"""
+        self._tableau["Tour 1"]["Match 5"].simuler()
+        self._tableau["Tour 1"]["Match 6"].simuler()
+
+        self._tableau["Tour 2"]["Match 3"].ajouter_equipe_2(
+            self._tableau["Tour 1"]["Match 5"].renvoyer_equipe_gagnante()
+            )
+        self._tableau["Tour 2"]["Match 4"].ajouter_equipe_2(
+            self._tableau["Tour 1"]["Match 6"].renvoyer_equipe_gagnante()
+            )
+
+    def __simuler_tour_2_matchs_3_4(self) -> None:
+        """Permet de simuler les matchs 3 et 4 du tour 2 et prépare les prochains matchs"""
+        self._tableau["Tour 2"]["Match 3"].simuler()
+        self._tableau["Tour 2"]["Match 4"].simuler()
+
+        self._tableau["Tour 3"]["Match 1"].ajouter_equipes(
+            self._tableau["Tour 2"]["Match 3"].renvoyer_equipe_gagnante(),
+            self._tableau["Tour 2"]["Match 4"].renvoyer_equipe_gagnante()
+            )
+
+    def __simuler_tour_4_match_1(self) -> None:
+        """Permet de simuler le match 1 du tour 4 et prépare les prochains matchs"""
+        self._tableau["Tour 4"]["Match 1"].simuler()
+
+        self._tableau["Tour 5"]["Match 1"].ajouter_equipe_1(
+            self._tableau["Tour 4"]["Match 1"].renvoyer_equipe_gagnante()
+            )
+        self._tableau["Tour 4"]["Match 2"].ajouter_equipe_1(
+            self._tableau["Tour 4"]["Match 1"].renvoyer_equipe_perdante()
+            )
+
+    def __simuler_tour_3(self) -> None:
+        """Permet de simuler le tour 3 et prépare les prochains matchs"""
+        self._tableau["Tour 3"]["Match 1"].simuler()
+
+        self._tableau["Tour 4"]["Match 2"].ajouter_equipe_2(
+            self._tableau["Tour 3"]["Match 1"].renvoyer_equipe_gagnante()
+            )
+
+    def __simuler_tour_4_match_2(self) -> None:
+        """Permet de simuler le match 2 du tour 4 et prépare le prochain match"""
+        self._tableau["Tour 4"]["Match 2"].simuler()
+
+        self._tableau["Tour 5"]["Match 1"].ajouter_equipe_2(
+            self._tableau["Tour 4"]["Match 2"].renvoyer_equipe_gagnante()
+            )
+
+    def __simuler_tour_5(self) -> None:
+        """Permet de simuler le tour 5"""
+        self._tableau["Tour 5"]["Match 1"].simuler()
+
+    def _simuler_tours(self) -> None:
+        """Permet de simuler tous les matchs des Brackets"""
+        self.__simuler_tour_1_matchs_1_a_4()
+        self.__simuler_tour_2_matchs_1_2()
+        self.__simuler_tour_1_matchs_5_6()
+        self.__simuler_tour_2_matchs_3_4()
+        self.__simuler_tour_4_match_1()
+        self.__simuler_tour_3()
+        self.__simuler_tour_4_match_2()
+        self.__simuler_tour_5()
+
+    def renvoyer_classement(self) -> dict[str, set(Equipe)]:
+        """Renvoie le classement des Brackets
+
+        Returns
+        -------
+        classement : dict[str, set(Equipe)]
+            Dictionnaire représentant le classement avec les clés repésentant les classements
+            et les valeurs repésentant les équipes qui ont ce classement
+        """
+        classement: dict[str, set(Equipe)] = dict()
+        classement["1"] = {
+            self._tableau["Tour 5"]["Match 1"].renvoyer_equipe_gagnante()
+            }
+        classement["2"] = {
+            self._tableau["Tour 5"]["Match 1"].renvoyer_equipe_perdante()
+            }
+        classement["3"] = {
+            self._tableau["Tour 4"]["Match 2"].renvoyer_equipe_perdante()
+            }
+        classement["4"] = {
+            self._tableau["Tour 3"]["Match 1"].renvoyer_equipe_perdante()
+            }
+        classement["5-6"] = {
+            self._tableau["Tour 2"]["Match 3"].renvoyer_equipe_perdante(),
+            self._tableau["Tour 2"]["Match 4"].renvoyer_equipe_perdante()
+            }
+        classement["7-8"] = {
+            self._tableau["Tour 1"]["Match 5"].renvoyer_equipe_perdante(),
+            self._tableau["Tour 1"]["Match 6"].renvoyer_equipe_perdante()
+            }
+        return classement
 
     def renvoyer_resultats_str(self) -> str:
         """Renvoie les résultats sous la forme d'une chaîne de caractères.

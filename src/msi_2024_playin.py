@@ -124,7 +124,6 @@ class MSI2024PlayIn(Phase):
 
     def _simuler_tours(self) -> None:
         """Permet de simuler tous les matchs du PlayIn"""
-        self._simuler_tirage()
         self.__simuler_tour_1_matchs_1_2()
         self.__simuler_tour_2_matchs_1()
         self.__simuler_tour_1_matchs_3()
