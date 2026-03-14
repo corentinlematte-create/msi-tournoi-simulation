@@ -58,24 +58,44 @@ class MSI2024Bracket(Phase):
 
     def _simuler_tirage(self) -> None:
         """Permet de simuler le tirage des Brackets"""
-        # while True:
-        # Boucle de tentative si une équipe est impossible à placer à cause de
-        # la règle des régions
-        # try:
         ind: list[int] = [rd.randint(0, 1) for _ in range(4)]
 
+        # Chapeau 1
         self._tableau["Tour 1"]["Match 1"].ajouter_equipe_1(
             self._chapeaux_equipes["Chapeau 1"][ind[0]])
         self._tableau["Tour 1"]["Match 4"].ajouter_equipe_1(
             self._chapeaux_equipes["Chapeau 1"][abs(ind[0] - 1)])
-        self._tableau["Tour 1"]["Match 2"].ajouter_equipe_1(
-            self._chapeaux_equipes["Chapeau 2"][ind[1]])
-        self._tableau["Tour 1"]["Match 3"].ajouter_equipe_1(
-            self._chapeaux_equipes["Chapeau 2"][abs(ind[1] - 1)])
 
-        if self._chapeaux_equipes["Chapeau 3"][ind[2]].region() in (
-                self._tableau["Tour 1"]["Match 1"].renvoyer_regions_equipes() |
-                self._tableau["Tour 1"]["Match 2"].renvoyer_regions_equipes()):
+        # Chapeau 2
+        region_3: set(str) = {self._chapeaux_equipes["Chapeau 3"][0].region,
+                              self._chapeaux_equipes["Chapeau 3"][1].region}
+        region_4: set(str) = {self._chapeaux_equipes["Chapeau 4"][0].region,
+                              self._chapeaux_equipes["Chapeau 4"][1].region}
+        if (self._chapeaux_equipes["Chapeau 1"][ind[0]].region in region_3 and
+                self._chapeaux_equipes["Chapeau 2"][ind[1]].region in region_3) or (
+                self._chapeaux_equipes["Chapeau 1"][abs(ind[0] - 1)].region in region_3 and
+                self._chapeaux_equipes["Chapeau 2"][abs(ind[1] - 1)].region in region_3) or (
+                self._chapeaux_equipes["Chapeau 1"][ind[0]].region in region_4 and
+                self._chapeaux_equipes["Chapeau 2"][ind[1]].region in region_4) or (
+                self._chapeaux_equipes["Chapeau 1"][abs(ind[0] - 1)].region in region_4 and
+                self._chapeaux_equipes["Chapeau 2"][abs(ind[1] - 1)].region in region_4):
+            self._tableau["Tour 1"]["Match 3"].ajouter_equipe_1(
+                self._chapeaux_equipes["Chapeau 2"][ind[1]])
+            self._tableau["Tour 1"]["Match 2"].ajouter_equipe_1(
+                self._chapeaux_equipes["Chapeau 2"][abs(ind[1] - 1)])
+        else:
+            self._tableau["Tour 1"]["Match 2"].ajouter_equipe_1(
+                self._chapeaux_equipes["Chapeau 2"][ind[1]])
+            self._tableau["Tour 1"]["Match 3"].ajouter_equipe_1(
+                self._chapeaux_equipes["Chapeau 2"][abs(ind[1] - 1)])
+
+        # Chapeau 3
+        region_part1: set(str) = (self._tableau["Tour 1"]["Match 1"].renvoyer_regions_equipes() |
+                                  self._tableau["Tour 1"]["Match 2"].renvoyer_regions_equipes())
+        region_part2: set(str) = (self._tableau["Tour 1"]["Match 3"].renvoyer_regions_equipes() |
+                                  self._tableau["Tour 1"]["Match 4"].renvoyer_regions_equipes())
+        if (self._chapeaux_equipes["Chapeau 3"][ind[2]].region in region_part1) or (
+                self._chapeaux_equipes["Chapeau 3"][abs(ind[2] - 1)].region in region_part2):
             self._tableau["Tour 1"]["Match 3"].ajouter_equipe_2(
                 self._chapeaux_equipes["Chapeau 3"][ind[2]])
             self._tableau["Tour 1"]["Match 2"].ajouter_equipe_2(
@@ -86,9 +106,9 @@ class MSI2024Bracket(Phase):
             self._tableau["Tour 1"]["Match 3"].ajouter_equipe_2(
                 self._chapeaux_equipes["Chapeau 3"][abs(ind[2] - 1)])
 
-        if self._chapeaux_equipes["Chapeau 4"][ind[3]].region() in (
-                self._tableau["Tour 1"]["Match 1"].renvoyer_regions_equipes() |
-                self._tableau["Tour 1"]["Match 2"].renvoyer_regions_equipes()):
+        # Chapeau 4
+        if (self._chapeaux_equipes["Chapeau 4"][ind[3]].region in region_part1) or (
+                self._chapeaux_equipes["Chapeau 4"][abs(ind[3] - 1)].region in region_part2):
             self._tableau["Tour 1"]["Match 4"].ajouter_equipe_2(
                 self._chapeaux_equipes["Chapeau 4"][ind[3]])
             self._tableau["Tour 1"]["Match 1"].ajouter_equipe_2(
