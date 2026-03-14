@@ -32,7 +32,7 @@ class Competition(ABC):
         """
         if not (
             isinstance(equipes, dict)
-            and all(isinstance(key, str) for key in equipes.keys())
+            and all(isinstance(key, str) for key in equipes)
             and set(equipes.keys()) == self.renvoyer_places()
             and all(isinstance(value, Equipe) for value in equipes.values())
         ):
@@ -43,8 +43,7 @@ class Competition(ABC):
         # Remplacement des têtes de série par les équipes
         chapeaux = self._CHAPEAUX
         self._chapeaux_equipes: dict[str, list[Equipe]] = {
-            chapeau: sorted([self._equipes[seed] for seed in chapeaux[chapeau]]) for chapeau in
-            chapeaux
+            chapeau: sorted([self._equipes[seed] for seed in chapeaux[chapeau]]) for chapeau in chapeaux
         }
 
     @abstractmethod

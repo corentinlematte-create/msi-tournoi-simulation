@@ -1,4 +1,5 @@
 """Implémentation de la classe Equipe."""
+
 from .coach import Coach
 from .joueur import Joueur
 
@@ -9,74 +10,73 @@ class Equipe:
     description.
     """
 
-    def __init__(self, nom_officiel, nom_abreviation, region, joueurs, coachs):
+    def __init__(
+        self, nom_officiel: str, nom_abreviation: str, region: str, joueurs: tuple[Joueur], coachs: tuple[Coach]
+    ) -> None:
         if type(nom_officiel) is not str:
             raise TypeError("nom_officiel doit être une chaine de caractère")
         else:
-            self.__nom_officiel = nom_officiel
+            self.__nom_officiel: str = nom_officiel
 
         if type(nom_abreviation) is not str:
             raise TypeError("nom_abreviation est une chaine de caractère entre 2 et 3 caractères")
         elif len(nom_abreviation) < 2 or len(nom_abreviation) > 3:
             raise TypeError("nom_abreviation doit contenir ")
         else:
-            self.__nom_abrevation = nom_abreviation
+            self.__nom_abreviation: str = nom_abreviation
 
         if region not in ["KR", "CN", "EMEA", "NA", "APAC", "VN", "BR", "LAT"]:
             raise TypeError("region doit être parmis : KR, CN, EMEA, NA, APAC, VN, BR, LAT")
         else:
-            self.__region = region
+            self.__region: str = region
 
-        if type(joueurs) is not list or len(joueurs) != 5:
-            raise TypeError("joueurs doit être une liste de 5 éléments ")
+        if type(joueurs) is not tuple or len(joueurs) != 5:
+            raise TypeError("joueurs doit être un tuple de 5 éléments ")
         elif not all(type(j) is Joueur for j in joueurs):
-            raise TypeError("joueurs doit être une liste d'objet Joueur")
+            raise TypeError("joueurs doit être un tuple d'objet Joueur")
         elif len(set(joueurs)) != 5:
-            raise TypeError("joueurs doit être une liste d'objet Joueur unique")
+            raise TypeError("joueurs doit être un tuple d'objet Joueur unique")
         else:
-            self.__joueurs = joueurs
+            self.__joueurs: tuple[Joueur] = joueurs
 
-        if type(coachs) is not list or len(coachs) != 2:
-            raise TypeError("coachs doit être une liste de 2 éléments ")
+        if type(coachs) is not tuple or len(coachs) > 2 or len(coachs) < 1:
+            raise TypeError("coachs doit être un tuple de 1 ou 2 éléments ")
         elif not all(type(c) is Coach for c in coachs):
-            raise TypeError("coachs doit être une liste d'objet Coach")
+            raise TypeError("coachs doit être un tuple d'objet Coach")
         elif len(set(joueurs)) != 5:
-            raise TypeError("coachs doit être une liste d'objet Coach unique")
+            raise TypeError("coachs doit être un tuple d'objet Coach unique")
         else:
-            self.__coachs = coachs
+            self.__coachs: tuple[Coach] = coachs
 
     @property
-    def nom_officiel(self):
+    def nom_officiel(self) -> str:
         return self.__nom_officiel
 
     @property
-    def nom_abreviation(self):
-        return self.__nom_abrevation
+    def nom_abreviation(self) -> str:
+        return self.__nom_abreviation
 
     @property
-    def region(self):
+    def region(self) -> str:
         return self.__region
 
-    def __eq__(self, autre):
+    def __eq__(self, autre: object) -> bool:
         if type(autre) is not Equipe:
             return NotImplemented
         else:
             return self.nom_officiel == autre.nom_officiel
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.nom_abreviation}"
 
-    def __repr__(self):
-        return (
-                f"Equipe({self.nom_officiel}, {self.nom_abreviation}, "
-                f"{self.region}, {self.__joueurs}, {self.__coach})"
-                )
+    def __repr__(self) -> str:
+        return f"Equipe({self.nom_officiel}, {self.nom_abreviation}, {self.region}, {self.__joueurs}, {self.__coachs})"
 
-    def __lt__(self, autre):
+    def __lt__(self, autre: object) -> bool:
         if type(autre) is not Equipe:
             return NotImplemented
         else:
             return self.nom_officiel < autre.nom_officiel
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(repr(self))

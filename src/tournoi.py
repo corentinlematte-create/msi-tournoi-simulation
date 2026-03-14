@@ -107,12 +107,12 @@ class Tournoi(Competition):
         n_equipes : int
             Nombre d'équipes participantes.
         """
-        if not all(isinstance(cle, str) for cle in cagnotte.keys()):
+        if not all(isinstance(cle, str) for cle in cagnotte):
             raise TypeError("Les clés du dictionnaire 'cagnotte' doivent être des chaînes de caractères.")
 
         # Génère puis trie la liste des rangs présents dans les clés
         liste_rangs = []
-        for cle in cagnotte.keys():
+        for cle in cagnotte:
             liste_rangs.extend(self.__verifier_nombre_str(cle))
         liste_rangs.sort()
 

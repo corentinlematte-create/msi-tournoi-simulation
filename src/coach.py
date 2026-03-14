@@ -1,6 +1,7 @@
 """Implémentation de la classe Coach."""
-from .personne import Personne
+
+from .personne import _Personne
 
 
-class Coach(Personne):
+class Coach(_Personne):
     pass

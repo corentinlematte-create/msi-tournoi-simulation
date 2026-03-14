@@ -1,6 +1,7 @@
 """Implémentation de la classe Joueur."""
-from .personne import Personne
+
+from .personne import _Personne
 
 
-class Joueur(Personne):
+class Joueur(_Personne):
     pass

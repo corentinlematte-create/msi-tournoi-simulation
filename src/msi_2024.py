@@ -19,26 +19,23 @@ class MSI2024(Tournoi):
 
     def simuler(self) -> None:
         """Permet de simuler la totalité du tournoi MSI2024"""
-        play_in: MSI2024PlayIn() = MSI2024PlayIn()
+        play_in: MSI2024PlayIn = MSI2024PlayIn()
 
         equipes_play_in: dict[str, Equipe] = {
             k: v for k, v in self._equipes.items() if k in self._CHAPEAUX["Chapeau Play-In"]
-            }
+        }
         play_in.ajouter_equipes(equipes_play_in)
 
         play_in.simuler()
 
-        qualif_play_in: set(Equipe) = (play_in.renvoyer_classement["1-2"]) | (
-                                       play_in.renvoyer_classement["3-4"])
+        qualif_play_in: set[Equipe] = (play_in.renvoyer_classement()["1-2"]) | (play_in.renvoyer_classement()["3-4"])
 
-        brackets: MSI2024Bracket() = MSI2024Bracket()
+        brackets: MSI2024Bracket = MSI2024Bracket()
 
         equipes_brackets: dict[str, Equipe] = {
             k: v for k, v in self._equipes.items() if k in self._CHAPEAUX["Chapeau Bracket"]
-            }
-        equipes_brackets = equipes_brackets | {
-            k: v for k, v in self._equipes.items() if v in qualif_play_in
         }
+        equipes_brackets = equipes_brackets | {k: v for k, v in self._equipes.items() if v in qualif_play_in}
         brackets.ajouter_equipes(equipes_brackets)
 
         brackets.simuler()
@@ -46,14 +43,13 @@ class MSI2024(Tournoi):
         self._phases["Play-In"] = play_in
         self._phases["Bracket"] = brackets
 
-    def renvoyer_classement(self) -> dict[str, set(Equipe)]:
+    def renvoyer_classement(self) -> dict[str, set[Equipe]]:
         """Renvoie le classement général du tournoi MSI2024"""
-        classement_gen_play_in: dict[str, set(Equipe)] = dict()
-        classement_gen_play_in["9-10"] = self._phases["Play-in"].renvoyer_classement["5-6"]
-        classement_gen_play_in["11-12"] = self._phases["Play-in"].renvoyer_classement["7-8"]
+        classement_gen_play_in: dict[str, set[Equipe]] = {}
+        classement_gen_play_in["9-10"] = self._phases["Play-in"].renvoyer_classement()["5-6"]
+        classement_gen_play_in["11-12"] = self._phases["Play-in"].renvoyer_classement()["7-8"]
 
-        classement: dict[str, set(Equipe)] = (self._phases["Bracket"].renvoyer_classement()) | (
-                                              classement_gen_play_in)
+        classement: dict[str, set[Equipe]] = (self._phases["Bracket"].renvoyer_classement()) | (classement_gen_play_in)
         return classement
 
     def renvoyer_classement_str(self) -> str:

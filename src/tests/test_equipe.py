@@ -1,4 +1,5 @@
 """Tests pour la classe Equipe."""
+
 import re
 
 import pytest
