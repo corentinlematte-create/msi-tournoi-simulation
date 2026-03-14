@@ -4,7 +4,7 @@ import re
 
 import pytest
 
-from ..personne import Personne
+from ..personne import _Personne
 
 
 @pytest.mark.parametrize(
@@ -16,7 +16,7 @@ from ..personne import Personne
 )
 def test_erreur_init(pseudo: str, message_erreur: str) -> None:
     with pytest.raises(TypeError, match=re.escape(message_erreur)):
-        Personne(pseudo)
+        _Personne(pseudo)
 
 
 @pytest.mark.parametrize(
@@ -27,20 +27,20 @@ def test_erreur_init(pseudo: str, message_erreur: str) -> None:
     ],
 )
 def test_creation_personne_valide(pseudo_valide: str) -> None:
-    p = Personne(pseudo_valide)
+    p = _Personne(pseudo_valide)
     assert p.pseudo == pseudo_valide
 
 
 @pytest.mark.parametrize(
     "personne_a, personne_b, egalite",
     [
-        (Personne("Alice"), Personne("Alice"), True),
-        (Personne("Alice"), Personne("Bob"), False),
-        (Personne("Alice"), Personne("alice"), False),
-        (Personne("Alice"), 12, NotImplemented),
+        (_Personne("Alice"), _Personne("Alice"), True),
+        (_Personne("Alice"), _Personne("Bob"), False),
+        (_Personne("Alice"), _Personne("alice"), False),
+        (_Personne("Alice"), 12, NotImplemented),
     ],
 )
-def test_eq(personne_a: Personne, personne_b: Personne, egalite: bool) -> None:
+def test_eq(personne_a: _Personne, personne_b: _Personne, egalite: bool) -> None:
     if egalite is NotImplemented:
         assert (personne_a.__eq__(personne_b)) is NotImplemented
     else:
@@ -49,23 +49,23 @@ def test_eq(personne_a: Personne, personne_b: Personne, egalite: bool) -> None:
 
 @pytest.mark.parametrize(
     "personne_a, representation",
-    [(Personne("Alice"), "Alice"), (Personne("Bob"), "Bob")],
+    [(_Personne("Alice"), "Alice"), (_Personne("Bob"), "Bob")],
 )
-def test_str(personne_a: Personne, representation: Personne) -> None:
+def test_str(personne_a: _Personne, representation: _Personne) -> None:
     assert str(personne_a) == representation
 
 
 @pytest.mark.parametrize(
     "personne_a, representation",
-    [(Personne("Alice"), "Personne(Alice)"), (Personne("Bob"), "Personne(Bob)")],
+    [(_Personne("Alice"), "_Personne(Alice)"), (_Personne("Bob"), "_Personne(Bob)")],
 )
-def test_repr(personne_a: Personne, representation: Personne) -> None:
+def test_repr(personne_a: _Personne, representation: _Personne) -> None:
     assert repr(personne_a) == representation
 
 
 @pytest.mark.parametrize(
     "personne_a, representation",
-    [(Personne("Alice"), "Personne(Alice)"), (Personne("Bob"), "Personne(Bob)")],
+    [(_Personne("Alice"), "_Personne(Alice)"), (_Personne("Bob"), "_Personne(Bob)")],
 )
-def test_hash(personne_a: Personne, representation: Personne) -> None:
+def test_hash(personne_a: _Personne, representation: _Personne) -> None:
     assert hash(personne_a) == hash(representation)

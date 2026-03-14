@@ -6,28 +6,37 @@ from .equipe import Equipe
 
 
 class Match:
-    """Classe modélisant un match.
+    """
+    Représente un match ayant lieu entre deux équipes avec le score de fin.
 
-    description.
+    Parameters
+    -----------
+    best_of : int
+              Le match se gagne au bout de 'best_of' affrontements.
+
+    equipe_1 : Equipe
+              Une des deux équipes qui s'affrontent, initialement none.
+
+    equipe_2 : Equipe
+              Une des deux équipes qui s'affrontent, initialement none.
+
+    score_equipe_1 : int
+              Nombre de manches gagnées par l'équipe 1 , initialement none.
+
+    score_equipe_2 : int
+              Nombre de manches gagnées par l'équipe 2 , initialement none.
     """
 
-    def __init__(
-        self,
-        best_of: int,
-        equipe_1: Equipe | None = None,
-        equipe_2: Equipe | None = None,
-        score_equipe_1: int | None = None,
-        score_equipe_2: int | None = None,
-    ) -> None:
+    def __init__(self, best_of: int) -> None:
         if best_of not in [1, 3, 5]:
             raise TypeError("best_of doit être parmis : 1,3,5")
         else:
             self.__best_of = best_of
 
-        self.__equipe_1: Equipe | None = equipe_1
-        self.__equipe_2: Equipe | None = equipe_2
-        self.__score_equipe_1: int | None = score_equipe_1
-        self.__score_equipe_2: int | None = score_equipe_2
+        self.__equipe_1: Equipe | None = None
+        self.__equipe_2: Equipe | None = None
+        self.__score_equipe_1: int | None = None
+        self.__score_equipe_2: int | None = None
 
     @property
     def best_of(self) -> int:
@@ -67,69 +76,69 @@ class Match:
         ligne2 = f"| {eq2:3} | {score2:1} |"
         return f"{bord}\n{ligne1}\n{ligne2}\n{bord}"
 
-    # def __str__(self):
-    #     if (
-    #         self.__equipe_1 is None and
-    #         self.__equipe_2 is None and
-    #         self.__score_equipe_1 is None and
-    #         self.__score_equipe_2 is None
-    #     ):
-    #         return (
-    #             "-----------\n"
-    #             "|      |   |\n"
-    #             "|      |   |\n"
-    #             "-----------"
-    #         )
-    #     elif (
-    #         self.__equipe_1 is None and
-    #         self.__equipe_2 is None and
-    #         self.__score_equipe_1 is not None and
-    #         self.__score_equipe_2 is not None
-    #     ):
-    #         return (
-    #             f"-----------\n"
-    #             f"|         | {self.__score_equipe_1}  |\n"
-    #             f"|         | {self.__score_equipe_2}  |\n"
-    #             f"-----------"
-    #         )
-    #     elif (
-    #         self.__equipe_1 is not None and
-    #         self.__equipe_2 is None and
-    #         self.__score_equipe_1 is None and
-    #         self.__score_equipe_2 is None
-    #     ):
-    #         return (
-    #             f"-----------\n"
-    #             f"|   {self.__equipe_1}   | {self.__score_equipe_1}  |\n"
-    #             f"|                       | {self.__score_equipe_2}  |\n"
-    #             f"-----------"
-    #         )
-
     def ajouter_equipe_1(self, equipe_1: Equipe) -> None:
+        """
+        Permet de rajouter l'equipe_1 à l'objet Match.
+
+        Parameters
+        -----------
+        equipe_1: Equipe
+                  Une des deux équipes qui s'affrontent.
+        """
         if self.__equipe_1 is not None:
             raise TypeError("equipe1 est déjà donné")
         elif type(equipe_1) is not Equipe:
             raise TypeError("equipe1 doit être une équipe")
         elif self.__equipe_2 == equipe_1:
-            raise TypeError("equipe1 doit être une équipedifférente de equipe2")
+            raise TypeError("equipe1 doit être une équipe différente de equipe2")
         else:
             self.__equipe_1 = equipe_1
 
     def ajouter_equipe_2(self, equipe_2: Equipe) -> None:
+        """
+        Permet de rajouter l'equipe_2 à l'objet Match.
+
+        Parameters
+        -----------
+        equipe_2: Equipe
+                  Une des deux équipes qui s'affrontent.
+        """
         if self.__equipe_2 is not None:
             raise TypeError("equipe2 est déjà donné")
         elif type(equipe_2) is not Equipe:
             raise TypeError("equipe2 doit être une équipe")
         elif self.__equipe_1 == equipe_2:
-            raise TypeError("equipe2 doit être une équipedifférente de equipe1")
+            raise TypeError("equipe2 doit être une équipe différente de equipe1")
         else:
             self.__equipe_2 = equipe_2
 
     def ajouter_equipes(self, equipe_1: Equipe, equipe_2: Equipe) -> None:
+        """
+        Permet de rajouter l'equipe_1 et l'equipe_2 à l'objet Match.
+
+        Parameters
+        -----------
+        equipe_1: Equipe
+                  Une des deux équipes qui s'affrontent.
+
+        equipe_2: Equipe
+                  Une des deux équipes qui s'affrontent.
+        """
         self.ajouter_equipe_1(equipe_1)
         self.ajouter_equipe_2(equipe_1)
 
     def ajouter_scores(self, score_equipe_1: int, score_equipe_2: int) -> None:
+        """
+        Permet de rajouter le score de l'equipe_1 et le score de l'equipe_2 à l'objet Match
+
+        Parameters
+        -----------
+        score_equipe_1: int
+                  Nombre de manches gagnées par l'équipe 1.
+
+        score_equipe_2: int
+                  Nombre de manches gagnées par l'équipe 2.
+        """
         if self.__equipe_2 is None or self.__equipe_2 is None:
             raise TypeError("les équipes doivent d'abord être inscrites")
         elif self.__score_equipe_1 is not None and self.__score_equipe_1 is not None:
@@ -145,30 +154,72 @@ class Match:
     def ajouter_equipes_et_scores(
         self, equipe_1: Equipe, equipe_2: Equipe, score_equipe_1: int, score_equipe_2: int
     ) -> None:
+        """
+        Permet de rajouter rajouter l'equipe_1, l'equipe_2, le score de l'equipe_1
+        et le score de l'equipe_2 à l'objet Match.
+
+        Parameters
+        -----------
+        equipe_1: Equipe
+                  Une des deux équipes qui s'affrontent.
+
+        equipe_2: Equipe
+                  Une des deux équipes qui s'affrontent.
+
+        score_equipe_1: int
+                  Nombre de manches gagnées par l'équipe 1.
+
+        score_equipe_2: int
+                  Nombre de manches gagnées par l'équipe 2.
+        """
         self.ajouter_equipes(equipe_1, equipe_2)
         self.ajouter_scores(score_equipe_1, score_equipe_2)
 
     def renvoyer_equipe_gagnante(self) -> Equipe:
-        if self.__score_equipe_1 is None or self.__score_equipe_2 is None:
+        """
+        Permet de renvoyer l'équipe gagnante ayant fait plus de point que l'autre.
+
+        Returns
+        -----------
+        Equipe
+              Equipe ayant fait plus de point que l'autre.
+        """
+        if self.__equipe_1 is None or self.__equipe_2 is None:
+            raise ValueError("Les équipes doivent être définies pour désigner un gagnant")
+        elif self.__score_equipe_1 is None or self.__score_equipe_2 is None:
             raise ValueError("les scores doivent être inscrits")
         elif self.__score_equipe_2 < self.__score_equipe_1:
-            assert self.__equipe_1 is not None
             return self.__equipe_1
         else:
-            assert self.__equipe_2 is not None
             return self.__equipe_2
 
     def renvoyer_equipe_perdante(self) -> Equipe:
-        if self.__score_equipe_1 is None or self.__score_equipe_2 is None:
+        """
+        Permet de renvoyer l'équipe perdante ayant fait moins de point que l'autre.
+
+        Returns
+        -----------
+        Equipe
+              Equipe ayant fait moins de point que l'autre.
+        """
+        if self.__equipe_1 is None or self.__equipe_2 is None:
+            raise ValueError("Les équipes doivent être définies pour désigner un gagnant")
+        elif self.__score_equipe_1 is None or self.__score_equipe_2 is None:
             raise ValueError("les scores doivent être inscrits")
         elif self.__score_equipe_2 < self.__score_equipe_1:
-            assert self.__equipe_2 is not None
             return self.__equipe_2
         else:
-            assert self.__equipe_1 is not None
             return self.__equipe_1
 
     def renvoyer_regions_equipes(self) -> set[str]:
+        """
+        Permet de renvoyer l'ensemble des régions associées aux équipes.
+
+        Returns
+        -----------
+        set[str]
+              Ensemble des régions associées aux équipes.
+        """
         if self.__equipe_1 is None and self.__equipe_2 is not None:
             return {self.__equipe_2.__region}
         elif self.__equipe_1 is not None and self.__equipe_2 is None:
@@ -179,6 +230,10 @@ class Match:
             return set()
 
     def simuler(self) -> None:
+        """
+        Permet de simuler une partie entre deux équipes.
+
+        """
         if self.__equipe_1 is None or self.__equipe_2 is None:
             raise ValueError("Il faut deux équipes pour jouer un match")
         point_equipe1: int = 0

@@ -2,9 +2,14 @@
 
 
 class _Personne:
-    """Classe modélisant une personne.
+    """
+    Représente une personne avec son pseudo.
 
-    description.
+    Parameters
+    ----------
+    pseudo : str
+           Le nom d'utilisateur de la personne.
+
     """
 
     def __init__(self, pseudo: str):

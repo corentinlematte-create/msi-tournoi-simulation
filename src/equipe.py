@@ -5,9 +5,26 @@ from .joueur import Joueur
 
 
 class Equipe:
-    """Classe modélisant une equipe.
+    """
+    Représente une equipe avec ses joueurs, coachs et autres caractéristiques.
 
-    description.
+    Parameters
+    -----------
+    nom_officiel : str
+                   Le nom officiele de l'équipe.
+
+    nom_breviation : str
+                   Le nom abrégé de l'équipe.
+
+    region : str
+                   La region de l'équipe parmi: KR, CN, EMEA, NA, APAC, VN, BR, LAT.
+
+    joueurs: tuple[Joueur]
+                   L'ensemble des joueurs de l'équipes.
+
+    coachs: tuple[Coach]
+                   L'ensemble des coach de l'équipes.
+
     """
 
     def __init__(
@@ -26,7 +43,7 @@ class Equipe:
             self.__nom_abreviation: str = nom_abreviation
 
         if region not in ["KR", "CN", "EMEA", "NA", "APAC", "VN", "BR", "LAT"]:
-            raise TypeError("region doit être parmis : KR, CN, EMEA, NA, APAC, VN, BR, LAT")
+            raise TypeError("region doit être parmi : KR, CN, EMEA, NA, APAC, VN, BR, LAT")
         else:
             self.__region: str = region
 
