@@ -125,7 +125,7 @@ class Match:
                   Une des deux équipes qui s'affrontent.
         """
         self.ajouter_equipe_1(equipe_1)
-        self.ajouter_equipe_2(equipe_1)
+        self.ajouter_equipe_2(equipe_2)
 
     def ajouter_scores(self, score_equipe_1: int, score_equipe_2: int) -> None:
         """
@@ -145,8 +145,8 @@ class Match:
             raise TypeError("les scores sont déjà donnés")
         elif type(score_equipe_1) is not int or type(score_equipe_2) is not int:
             raise TypeError("les scores doivent être des entiers positifs")
-        elif (score_equipe_1 > (self.best_of // 2) + 1) or (score_equipe_2 > (self.best_of // 2) + 1):
-            raise ValueError("les scores doivent être cohérents avec le best_of")
+        elif max(score_equipe_1, score_equipe_2) != (self.best_of // 2) + 1:
+            raise TypeError("les scores doivent être cohérents avec le best_of")
         else:
             self.__score_equipe_1 = score_equipe_1
             self.__score_equipe_2 = score_equipe_2
@@ -185,9 +185,9 @@ class Match:
               Equipe ayant fait plus de point que l'autre.
         """
         if self.__equipe_1 is None or self.__equipe_2 is None:
-            raise ValueError("Les équipes doivent être définies pour désigner un gagnant")
+            raise TypeError("Les équipes doivent être définies pour désigner un gagnant")
         elif self.__score_equipe_1 is None or self.__score_equipe_2 is None:
-            raise ValueError("les scores doivent être inscrits")
+            raise TypeError("les scores doivent être inscrits")
         elif self.__score_equipe_2 < self.__score_equipe_1:
             return self.__equipe_1
         else:
@@ -203,9 +203,9 @@ class Match:
               Equipe ayant fait moins de point que l'autre.
         """
         if self.__equipe_1 is None or self.__equipe_2 is None:
-            raise ValueError("Les équipes doivent être définies pour désigner un gagnant")
+            raise TypeError("Les équipes doivent être définies pour désigner un gagnant")
         elif self.__score_equipe_1 is None or self.__score_equipe_2 is None:
-            raise ValueError("les scores doivent être inscrits")
+            raise TypeError("les scores doivent être inscrits")
         elif self.__score_equipe_2 < self.__score_equipe_1:
             return self.__equipe_2
         else:
@@ -221,11 +221,11 @@ class Match:
               Ensemble des régions associées aux équipes.
         """
         if self.__equipe_1 is None and self.__equipe_2 is not None:
-            return {self.__equipe_2.__region}
+            return {self.__equipe_2.region}
         elif self.__equipe_1 is not None and self.__equipe_2 is None:
-            return {self.__equipe_1.__region}
+            return {self.__equipe_1.region}
         elif self.__equipe_1 is not None and self.__equipe_2 is not None:
-            return {self.__equipe_1.__region, self.__equipe_2.__region}
+            return {self.__equipe_1.region, self.__equipe_2.region}
         else:
             return set()
 
@@ -234,8 +234,6 @@ class Match:
         Permet de simuler une partie entre deux équipes.
 
         """
-        if self.__equipe_1 is None or self.__equipe_2 is None:
-            raise ValueError("Il faut deux équipes pour jouer un match")
         point_equipe1: int = 0
         point_equipe2: int = 0
         if self.__best_of == 1:

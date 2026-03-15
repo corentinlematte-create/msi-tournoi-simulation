@@ -51,7 +51,7 @@ def test_eq(personne_a: _Personne, personne_b: _Personne, egalite: bool) -> None
     "personne_a, representation",
     [(_Personne("Alice"), "Alice"), (_Personne("Bob"), "Bob")],
 )
-def test_str(personne_a: _Personne, representation: _Personne) -> None:
+def test_str(personne_a: _Personne, representation: str) -> None:
     assert str(personne_a) == representation
 
 

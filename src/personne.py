@@ -24,7 +24,7 @@ class _Personne:
         return self.__pseudo
 
     def __eq__(self, autre: object) -> bool:
-        if type(autre) is not _Personne:
+        if type(autre) is not self.__class__:
             return NotImplemented
         else:
             return self.pseudo == autre.pseudo

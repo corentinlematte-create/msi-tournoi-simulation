@@ -36,9 +36,9 @@ class Equipe:
             self.__nom_officiel: str = nom_officiel
 
         if type(nom_abreviation) is not str:
-            raise TypeError("nom_abreviation est une chaine de caractère entre 2 et 3 caractères")
+            raise TypeError("nom_abreviation est une chaine de caractère")
         elif len(nom_abreviation) < 2 or len(nom_abreviation) > 3:
-            raise TypeError("nom_abreviation doit contenir ")
+            raise TypeError("nom_abreviation doit contenir entre 2 et 3 caractères")
         else:
             self.__nom_abreviation: str = nom_abreviation
 
@@ -51,16 +51,16 @@ class Equipe:
             raise TypeError("joueurs doit être un tuple de 5 éléments ")
         elif not all(type(j) is Joueur for j in joueurs):
             raise TypeError("joueurs doit être un tuple d'objet Joueur")
-        elif len(set(joueurs)) != 5:
+        elif any(joueurs.count(j) > 1 for j in joueurs):
             raise TypeError("joueurs doit être un tuple d'objet Joueur unique")
         else:
             self.__joueurs: tuple[Joueur] = joueurs
 
         if type(coachs) is not tuple or len(coachs) > 2 or len(coachs) < 1:
-            raise TypeError("coachs doit être un tuple de 1 ou 2 éléments ")
+            raise TypeError("coachs doit être un tuple de 1 ou 2 éléments")
         elif not all(type(c) is Coach for c in coachs):
             raise TypeError("coachs doit être un tuple d'objet Coach")
-        elif len(set(joueurs)) != 5:
+        elif any(coachs.count(c) > 1 for c in coachs):
             raise TypeError("coachs doit être un tuple d'objet Coach unique")
         else:
             self.__coachs: tuple[Coach] = coachs
