@@ -231,7 +231,7 @@ class Match:
 
     def simuler(self) -> None:
         """
-        Permet de simuler une partie entre deux équipes.
+        Permet de simuler une partie entre deux équipes en ajoutant les codes finaux.
 
         """
         point_equipe1: int = 0

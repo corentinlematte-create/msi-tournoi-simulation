@@ -150,7 +150,7 @@ def test_str_match(match: Match, representation) -> None:
         ),
     ],
 )
-def test_erreur_ajouter_match1(match: Match, equipe_1: Equipe, message_erreur: str) -> None:
+def test_erreur_ajouter_equipe1(match: Match, equipe_1: Equipe, message_erreur: str) -> None:
     with pytest.raises(TypeError, match=re.escape(message_erreur)):
         match.ajouter_equipe_1(equipe_1)
 
@@ -223,7 +223,7 @@ def test_erreur_ajouter_equipe2(match: Match, equipe_2: Equipe, message_erreur: 
         )
     ],
 )
-def test_ajouter_match2(match: Match, equipe_2: Equipe) -> None:
+def test_ajouter_equipe2(match: Match, equipe_2: Equipe) -> None:
     match.ajouter_equipe_2(equipe_2)
     assert match.equipe_2 == equipe_2
 
