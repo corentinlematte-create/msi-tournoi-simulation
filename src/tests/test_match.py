@@ -89,37 +89,34 @@ def preparer_match_sans_scores():
     return m
 
 
+def preparer_bo1_sans_scores():
+    m = Match(1)
+    e1 = Equipe(
+        "Les plus forts",
+        "LPF",
+        "KR",
+        (Joueur("Pierre"), Joueur("Marie"), Joueur("Jean"), Joueur("Luc"), Joueur("André")),
+        (Coach("Louis"),),
+    )
+    e2 = Equipe(
+        "Cyber Knights",
+        "CK",
+        "CN",
+        (Joueur("Hugo"), Joueur("Léa"), Joueur("Max"), Joueur("Inès"), Joueur("Tom")),
+        (Coach("Marc"),),
+    )
+    m.ajouter_equipes(e1, e2)
+    return m
+
+
 @pytest.mark.parametrize(
     "match, representation",
-    [(
-        preparer_match_sans_scores(), 
-        "-----------\n"
-        "| LPF |   |\n"
-        "| CK  |   |\n"
-        "-----------"
-    ),
-    (
-        preparer_match_juste_equipe1(), 
-        "-----------\n"
-        "| LPF |   |\n"
-        "|     |   |\n"
-        "-----------"
-    ),
-    (
-        preparer_match_juste_equipe2(), 
-        "-----------\n"
-        "|     |   |\n"
-        "| CK  |   |\n"
-        "-----------"
-    ),
-    (
-        preparer_match_plein(),
-        "-----------\n"
-        "| LPF | 2 |\n"
-        "| CK  | 3 |\n"
-        "-----------"
-    ),
-],
+    [
+        (preparer_match_sans_scores(), "-----------\n" "| LPF |   |\n" "| CK  |   |\n" "-----------"),
+        (preparer_match_juste_equipe1(), "-----------\n" "| LPF |   |\n" "|     |   |\n" "-----------"),
+        (preparer_match_juste_equipe2(), "-----------\n" "|     |   |\n" "| CK  |   |\n" "-----------"),
+        (preparer_match_plein(), "-----------\n" "| LPF | 2 |\n" "| CK  | 3 |\n" "-----------"),
+    ],
 )
 def test_str_match(match: Match, representation) -> None:
     assert str(match) == representation
@@ -387,14 +384,29 @@ def test_equipe_perdante(match: Match) -> None:
     )
 
 
-@pytest.mark.parametrize("match", [preparer_match_plein()])
-def test_equipe_region(match: Match) -> None:
-    assert match.renvoyer_regions_equipes() == {"CN", "KR"}
+@pytest.mark.parametrize(
+    "match, expected",
+    [
+        (preparer_match_plein(), {"CN", "KR"}),
+        (preparer_match_juste_equipe1(), {"KR"}),
+        (preparer_match_juste_equipe2(), {"CN"}),
+        (Match(5), set()),
+    ],
+)
+def test_equipe_region(match: Match, expected: set[str]) -> None:
+    assert match.renvoyer_regions_equipes() == expected
 
 
-@pytest.mark.parametrize("match, score_equipe_1, score_equipe_2", [(preparer_match_sans_scores(), 1, 3)])
-def test_simulation(match: Match, score_equipe_1: int, score_equipe_2: int) -> None:
-    seed(42)
+@pytest.mark.parametrize(
+    "match, score_equipe_1, score_equipe_2, seed_match",
+    [
+        (preparer_match_sans_scores(), 1, 3, 42),
+        (preparer_bo1_sans_scores(), 1, 0, 5),
+        (preparer_bo1_sans_scores(), 0, 1, 1),
+    ],
+)
+def test_simulation(match: Match, score_equipe_1: int, score_equipe_2: int, seed_match: int) -> None:
+    seed(seed_match)
     match.simuler()
     assert match.score_equipe_1 == score_equipe_1
     assert match.score_equipe_2 == score_equipe_2

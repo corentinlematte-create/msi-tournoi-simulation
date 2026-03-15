@@ -28,14 +28,16 @@ class MSI2024(Tournoi):
 
         play_in.simuler()
 
-        qualif_play_in: set[Equipe] = (play_in.renvoyer_classement()["1-2"]) | (play_in.renvoyer_classement()["3-4"])
+        qualif_play_in_1: list[Equipe] = list(play_in.renvoyer_classement()["1-2"])
+        qualif_play_in_2: list[Equipe] = list(play_in.renvoyer_classement()["3-4"])
 
         brackets: MSI2024Bracket = MSI2024Bracket()
 
         equipes_brackets: dict[str, Equipe] = {
             k: v for k, v in self._equipes.items() if k in self._CHAPEAUX["Chapeau Bracket"]
         }
-        equipes_brackets = equipes_brackets | {k: v for k, v in self._equipes.items() if v in qualif_play_in}
+        equipes_brackets |= {"Play-In #1": qualif_play_in_1[0], "Play-In #2": qualif_play_in_1[1]}
+        equipes_brackets |= {"Play-In #3": qualif_play_in_2[0], "Play-In #4": qualif_play_in_2[1]}
         brackets.ajouter_equipes(equipes_brackets)
 
         brackets.simuler()

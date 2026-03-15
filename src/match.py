@@ -139,9 +139,9 @@ class Match:
         score_equipe_2: int
                   Nombre de manches gagnées par l'équipe 2.
         """
-        if self.__equipe_2 is None or self.__equipe_2 is None:
+        if self.__equipe_1 is None or self.__equipe_2 is None:
             raise TypeError("les équipes doivent d'abord être inscrites")
-        elif self.__score_equipe_1 is not None and self.__score_equipe_1 is not None:
+        elif self.__score_equipe_1 is not None and self.__score_equipe_2 is not None:
             raise TypeError("les scores sont déjà donnés")
         elif type(score_equipe_1) is not int or type(score_equipe_2) is not int:
             raise TypeError("les scores doivent être des entiers positifs")

@@ -158,10 +158,10 @@ class MSI2024Bracket(Phase):
             self._tableau["Tour 2"]["Match 1"].renvoyer_equipe_gagnante(),
             self._tableau["Tour 2"]["Match 2"].renvoyer_equipe_gagnante(),
         )
-        self._tableau["Tour 2"]["Match 3"].ajouter_equipe_1(
+        self._tableau["Tour 2"]["Match 4"].ajouter_equipe_1(
             self._tableau["Tour 2"]["Match 1"].renvoyer_equipe_perdante()
         )
-        self._tableau["Tour 2"]["Match 4"].ajouter_equipe_1(
+        self._tableau["Tour 2"]["Match 3"].ajouter_equipe_1(
             self._tableau["Tour 2"]["Match 2"].renvoyer_equipe_perdante()
         )
 
