@@ -46,8 +46,8 @@ class MSI2024(Tournoi):
     def renvoyer_classement(self) -> dict[str, set[Equipe]]:
         """Renvoie le classement général du tournoi MSI2024"""
         classement_gen_play_in: dict[str, set[Equipe]] = {}
-        classement_gen_play_in["9-10"] = self._phases["Play-in"].renvoyer_classement()["5-6"]
-        classement_gen_play_in["11-12"] = self._phases["Play-in"].renvoyer_classement()["7-8"]
+        classement_gen_play_in["9-10"] = self._phases["Play-In"].renvoyer_classement()["5-6"]
+        classement_gen_play_in["11-12"] = self._phases["Play-In"].renvoyer_classement()["7-8"]
 
         classement: dict[str, set[Equipe]] = (self._phases["Bracket"].renvoyer_classement()) | (classement_gen_play_in)
         return classement
